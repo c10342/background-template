@@ -1,0 +1,56 @@
+#layout{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+}
+
+#layout .header{
+    background-color: #12203E;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#layout .my-item{
+    display: block;
+}
+
+#layout .logo{
+    width: 179px;
+    height: 44px;
+    display: block;
+    background: url("./images/logo.png") no-repeat;
+}
+
+#layout .avatar{
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+}
+
+#layout .person{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+}
+
+#layout .author{
+    text-align: center;
+    color: white;
+    margin-left: 10px;
+}
+
+#layout .author span:nth-child(2){
+    margin: 0 10px;
+}
+
+#layout .author span:nth-child(3){
+    cursor: pointer;
+    color: red;
+}

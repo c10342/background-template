@@ -1,0 +1,69 @@
+#detail{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0,0,0,.4);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#detail>.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    position: relative;
+}
+
+#detail>.content .icon{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+#detail .content .image{
+    width: 408px;
+    height: 200px;
+}
+#detail .content .item{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#detail .content .item>div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+
+#detail .content .item>div>div:nth-child(1){
+    border-right: 1px solid #cccccc;
+    padding-right: 20px;
+    text-align: right;
+    font-weight: bold;
+}
+
+#detail .content .item>div>div:nth-child(2){
+    font-weight: 500;
+    padding: 20px;
+}
+
+#detail .content .item .btn{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    padding-bottom: 10px;
+    margin-left: -25px;
+}

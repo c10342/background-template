@@ -1,0 +1,91 @@
+
+#list .table{
+    border: 1px solid #ccc;
+}
+
+#list .tableTitle{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 18px;
+    border-bottom: 1px solid #cccccc;
+    background-color: #F0F2F5;
+}
+
+#list .tableTitle>div{
+    flex: 0.2;
+    padding: 10px;
+    text-align: center;
+}
+
+#list .tableTitle>div+div{
+    border-left: 1px solid #cccccc;
+}
+
+#list .tableContent{
+    display: flex;
+    flex-direction: column;
+}
+
+#list .tableItem{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 16px;
+}
+
+#list .tableItem:hover{
+    background-color: #E9F8FF;
+}
+
+#list .tableItem>span{
+    padding: 10px;
+}
+
+#list .tableItem>span+span{
+    border-left: 1px solid #cccccc;
+}
+
+#list .tableContent div.tableItem+div.tableItem{
+    border-top: 1px solid #cccccc;
+}
+
+#list .tableItem>span{
+    flex: 0.2;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis;
+}
+
+#list .check{
+    color: #1d8ce0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#list .check>span:hover{
+    text-decoration: underline;
+}
+
+#list .search{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+#list>.pagination{
+    text-align: center;
+    margin-top: 10px;
+    /*position: fixed;*/
+    /*bottom: -25px;*/
+    /*left: 50%;*/
+    /*transform: translateX(-50%);*/
+}
