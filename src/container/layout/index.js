@@ -89,7 +89,8 @@ class LayOut extends Component {
         return (
             <Layout id="layout">
                 <Header className="header">
-                    <div className='logo'></div>
+                <div class='my-title'>团购网</div>
+                    {/* <div className='logo'></div> */}
                     <div className='person'>
                         <img className='avatar' src={avatar} alt=""/>
                         <div className='author'>
@@ -124,7 +125,8 @@ class LayOut extends Component {
                                 }}>
                                 <Icon type="user" theme="outlined"/>
                                 <Texty interval={200} delay={400} component={'span'}>
-                                    用户管理
+                                    {/* 用户管理 */}
+                                    商品管理
                                 </Texty>
                             </Menu.Item>
 

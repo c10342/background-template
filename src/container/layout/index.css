@@ -54,3 +54,9 @@
     cursor: pointer;
     color: red;
 }
+
+#layout .my-title{
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+}
