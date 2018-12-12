@@ -17,16 +17,15 @@ class List extends Component {
                         {this.props.children}
                     </div>
                 </div>
-                {/* {this.props.total<=this.props.pageSize?null:(<div className='pagination'>
+                {!this.props.show?null:(<div className='pagination'>
                     <Pagination
                         hideOnSinglePage={true}
                         showQuickJumper
                         defaultCurrent={1}
                         total={this.props.total}
                         pageSize={this.props.pageSize}
-                        onChange={(pageNumber)=>{this.onChange(pageNumber)}}
-                        current={this.props.current}/>,
-                </div>)} */}
+                        onChange={(pageNumber)=>{this.onChange(pageNumber)}}/>,
+                </div>)}
             </div>
         )
     }

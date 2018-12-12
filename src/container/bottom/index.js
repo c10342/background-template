@@ -12,7 +12,7 @@ class Bottom extends Component {
             <Fragment>
                 <Footer style={{textAlign: 'center',backgroundColor:'#1F3668',
                 padding:0,height:32,color:'white',lineHeight:'32px'}}>
-                    Ant Design ©2018 Created by Ant UED
+                    团购网商家管理
                 </Footer>
             </Fragment>
         )

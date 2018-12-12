@@ -1,0 +1,95 @@
+#order{
+    padding: 24px;
+}
+
+#order .check{
+    color: #1d8ce0;
+    cursor: pointer;
+}
+
+/*#order .table{*/
+    /*border: 1px solid #ccc;*/
+/*}*/
+
+/*#order .tableTitle{*/
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*align-items: center;*/
+    /*justify-content: space-around;*/
+    /*font-size: 18px;*/
+    /*border-bottom: 1px solid #cccccc;*/
+    /*background-color: #F0F2F5;*/
+/*}*/
+
+/*#order .tableTitle>div{*/
+    /*flex: 0.2;*/
+    /*padding: 10px;*/
+    /*text-align: center;*/
+/*}*/
+
+/*#order .tableTitle>div+div{*/
+    /*border-left: 1px solid #cccccc;*/
+/*}*/
+
+/*#order .tableContent{*/
+    /*display: flex;*/
+    /*flex-direction: column;*/
+/*}*/
+
+/*#order .tableItem{*/
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*align-items: center;*/
+    /*justify-content: space-around;*/
+    /*font-size: 16px;*/
+/*}*/
+
+/*#order .tableItem:hover{*/
+    /*background-color: #E9F8FF;*/
+/*}*/
+
+/*#order .tableItem>span{*/
+    /*padding: 10px;*/
+/*}*/
+
+/*#order .tableItem>span+span{*/
+    /*border-left: 1px solid #cccccc;*/
+/*}*/
+
+/*#order .tableContent div.tableItem+div.tableItem{*/
+    /*border-top: 1px solid #cccccc;*/
+/*}*/
+
+/*#order .tableItem>span{*/
+    /*flex: 0.2;*/
+    /*text-align: center;*/
+    /*white-space: nowrap;*/
+    /*overflow: hidden;*/
+    /*text-overflow:ellipsis;*/
+/*}*/
+
+/*#order .check{*/
+    /*color: #1d8ce0;*/
+    /*cursor: pointer;*/
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*justify-content: space-around;*/
+    /*align-items: center;*/
+/*}*/
+
+/*#order .check>span:hover{*/
+    /*text-decoration: underline;*/
+/*}*/
+
+#order .search{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+/*#order>.pagination{*/
+    /*text-align: center;*/
+    /*margin-top: 10px;*/
+/*}*/

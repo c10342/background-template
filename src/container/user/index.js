@@ -50,9 +50,6 @@ class User extends Component {
                     <Button icon="search" type="primary">搜索</Button>
                 </div>
                 <List
-                    onChange={this.onChange.bind(this)}
-                    check={this.check.bind(this)}
-                    edit={this.edit.bind(this)}
                     columns={columns}>
                     {
                         this.state.dataSource.map((item, index) => {
@@ -62,14 +59,17 @@ class User extends Component {
                                     <span>{item.name}</span>
                                     <span>{item.province}</span>
                                     <span className='check'>
-                                        <span onClick={() => this.props.check(item)}>查看</span>
-                                        <span onClick={() => this.props.edit(item)}>编辑</span>
+                                        <span onClick={() => this.check(item)}>查看</span>
+                                        <span onClick={() => this.edit(item)}>编辑</span>
+                                        <span>删除</span>
+                                        <span>上架</span>
                                     </span>
                                 </div>
                             );
                         })
                     }
                 </List>
+               
             </div>
         )
     }

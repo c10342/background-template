@@ -6,17 +6,10 @@ import Texty from 'rc-texty';
 import 'rc-texty/assets/index.css';
 import avatar from './images/default.png'
 
-import Home from '../home'
 import User from '../user'
-import GroupList from '../group-list'
-import GroupReport from '../group-report'
-import GroupExamine from '../group-examine'
-import BackStageCategory from '../backstage-category'
-import BackStageSlider from '../backstage-slider'
-import BackStageStart from '../backstage-start'
-import SystemJurisdiction from '../system-jurisdiction'
-import SystemNumber from '../system-number'
+import Order from '../order'
 import Bottom from '../bottom'
+import AddGood from '../backstage-slider'
 
 
 const {SubMenu} = Menu;
@@ -27,59 +20,24 @@ class LayOut extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            title: '首页'
+            title: '商品管理'
         }
         this.router=[
             {
-                path:"/home",
-                component:Home,
-                title:'首页'
-            },
-            {
-                path:"/user",
+                path:"/shop",
                 component:User,
-                title:'用户管理'
+                title:'商品管理'
             },
             {
-                path:"/backstage/category",
-                component:BackStageCategory,
-                title:'群类别管理'
+                path:"/order",
+                component:Order,
+                title:'订单查看'
             },
             {
-                path:"/backstage/slider",
-                component:BackStageSlider,
-                title:'轮播图管理'
-            },
-            {
-                path:"/backstage/start",
-                component:BackStageStart,
-                title:'启动项管理'
-            },
-            {
-                path:"/group/list",
-                component:GroupList,
-                title:'群列表'
-            },
-            {
-                path:"/group/report",
-                component:GroupReport,
-                title:'群审核'
-            },
-            {
-                path:"/group/examine",
-                component:GroupExamine,
-                title:'群举报'
-            },
-            {
-                path:"/system/jurisdiction",
-                component:SystemJurisdiction,
-                title:'权限管理'
-            },
-            {
-                path:"/system/number",
-                component:SystemNumber,
-                title:'账号管理'
-            },
+                path:"/addGood",
+                component:AddGood,
+                title:'添加商品'
+            }
         ]
     }
 
@@ -89,8 +47,7 @@ class LayOut extends Component {
         return (
             <Layout id="layout">
                 <Header className="header">
-                <div class='my-title'>团购网</div>
-                    {/* <div className='logo'></div> */}
+                <div className='my-title'>团购网</div>
                     <div className='person'>
                         <img className='avatar' src={avatar} alt=""/>
                         <div className='author'>
@@ -109,19 +66,9 @@ class LayOut extends Component {
                             style={{height: '100%', borderRight: 0}}
                         >
                             <Menu.Item
-                                key="/home"
+                                key="/shop"
                                 onClick={() => {
-                                    this.handleerClick('首页', '/home')
-                                }}>
-                                <Icon type="home" theme="outlined"/>
-                                <Texty interval={200} component={'span'}>
-                                    首页
-                                </Texty>
-                            </Menu.Item>
-                            <Menu.Item
-                                key="/user"
-                                onClick={() => {
-                                    this.handleerClick('用户管理', '/user')
+                                    this.handleerClick('商品管理', '/shop')
                                 }}>
                                 <Icon type="user" theme="outlined"/>
                                 <Texty interval={200} delay={400} component={'span'}>
@@ -129,59 +76,26 @@ class LayOut extends Component {
                                     商品管理
                                 </Texty>
                             </Menu.Item>
-
-                            <SubMenu
-                                key="/group"
-                                title={
-                                    <span
-                                        className='my-item'
-                                        onClick={() => {
-                                            this.handleerClick('群列表', '/group/list')
-                                        }}
-                                    >
-                                        <Icon type="usergroup-add" theme="outlined"/><Texty interval={200} delay={1200} component={'span'}>群组管理</Texty></span>}>
-                                <Menu.Item onClick={() => {
-                                    this.handleerClick('群列表', '/group/list')
-                                }} key="/group/list"> <Texty interval={200}>群列表</Texty></Menu.Item>
-                                <Menu.Item onClick={() => {
-                                    this.handleerClick('群审核', '/group/report')
-                                }} key="/group/report"><Texty interval={200} delay={600}>群审核</Texty></Menu.Item>
-                                <Menu.Item onClick={() => {
-                                    this.handleerClick('群举报', '/group/examine')
-                                }} key="/group/examine"><Texty interval={200} delay={1200}>群举报</Texty></Menu.Item>
-                            </SubMenu>
-                            <SubMenu key="/backstage" title={
-                                <span
-                                    className='my-item'
-                                    onClick={() => {
-                                        this.handleerClick('启动项管理', '/backstage/start')
-                                    }}
-                                ><Icon type="pic-left" theme="outlined"/><Texty interval={200} delay={2000} component={'span'}>后台设置</Texty></span>}>
-                                <Menu.Item onClick={() => {
-                                    this.handleerClick('启动项管理', '/backstage/start')
-                                }} key='/backstage/start'><Texty interval={200}>启动项管理</Texty></Menu.Item>
-                                <Menu.Item onClick={() => {
-                                    this.handleerClick('轮播图管理', '/backstage/slider')
-                                }} key="/backstage/slider"><Texty interval={200} delay={1000}>轮播图管理</Texty></Menu.Item>
-                                <Menu.Item onClick={() => {
-                                    this.handleerClick('群类别管理', '/backstage/category')
-                                }} key="/backstage/category"><Texty interval={200} delay={2000}>群类别管理</Texty></Menu.Item>
-                            </SubMenu>
-                            <SubMenu key="/system" title={<span
-                                className='my-item'
+                            <Menu.Item
+                                key="/order"
                                 onClick={() => {
-                                    this.handleerClick('权限设置', '/system/jurisdiction')
-                                }}
-                            ><Icon type="setting" theme="outlined"/><Texty interval={200} delay={2800}
-                                                                           component={'span'}>系统设置</Texty></span>}>
-                                <Menu.Item onClick={() => {
-                                    this.handleerClick('权限管理', '/system/jurisdiction')
-                                }} key="/system/jurisdiction"><Texty interval={200}>权限管理</Texty></Menu.Item>
-                                <Menu.Item onClick={() => {
-                                    this.handleerClick('账号管理', '/system/number')
-                                }} key="/system/number"><Texty interval={200} delay={800}>账号管理</Texty></Menu.Item>
-                            </SubMenu>
-
+                                    this.handleerClick('订单查看', '/order')
+                                }}>
+                                <Icon type="shopping-cart" theme="outlined" />
+                                <Texty interval={200} delay={400} component={'span'}>
+                                    订单查看
+                                </Texty>
+                            </Menu.Item>
+                            <Menu.Item
+                                key="/addGood"
+                                onClick={() => {
+                                    this.handleerClick('添加商品', '/addGood')
+                                }}>
+                                <Icon type="google-plus" theme="outlined" />
+                                <Texty interval={200} delay={400} component={'span'}>
+                                    添加商品
+                                </Texty>
+                            </Menu.Item>
                         </Menu>
                     </Sider>
                     <Layout style={{padding: '0 24px 24px'}}>
