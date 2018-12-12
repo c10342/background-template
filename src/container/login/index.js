@@ -42,7 +42,7 @@ class Login extends Component {
     }
     login(){
         this.props.history.push({
-            pathname:'/home'
+            pathname:'/shop'
         })
     }
     onChange(e,key){

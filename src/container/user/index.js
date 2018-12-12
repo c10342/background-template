@@ -59,10 +59,11 @@ class User extends Component {
                                     <span>{item.name}</span>
                                     <span>{item.province}</span>
                                     <span className='check'>
-                                        <span onClick={() => this.check(item)}>查看</span>
+                                        {/* <span onClick={() => this.check(item)}>查看</span> */}
                                         <span onClick={() => this.edit(item)}>编辑</span>
                                         <span>删除</span>
                                         <span>上架</span>
+                                        <span>抢购</span>
                                     </span>
                                 </div>
                             );

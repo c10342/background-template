@@ -4,9 +4,7 @@ import QueueAnim from 'rc-queue-anim';
 import './index.css'
 import { post, error, success, formatDate, get } from '../../util'
 import axios from 'axios'
-import './utf8-jsp/ueditor.config.js'
-import './utf8-jsp/ueditor.all.js'
-import './utf8-jsp/ueditor.parse.js'
+import wangEditor from 'wangeditor'
 
 const Option = Select.Option;
 const provinceData = ['Zhejiang', 'Jiangsu'];
@@ -18,19 +16,28 @@ const cityData = {
 class BackStageSlider extends Component {
     constructor(props) {
         super(props)
+        this.editor2=null
         this.state = {
             cities: cityData[provinceData[0]],
             secondCity: cityData[provinceData[0]][0],
-            title: null,
-            url: null,
-            index: null,
-            image: null,
-            isShowFrom: false,
-            total: null,
-            pageSize: 6,
-            currentPage: 1,
-            dataSource: [],
-            isCheck: false
+            // title: null,
+            // url: null,
+            // index: null,
+            // image: null,
+            // isShowFrom: false,
+            // total: null,
+            // pageSize: 6,
+            // currentPage: 1,
+            // dataSource: [],
+            // isCheck: false
+            name:null,
+            price:null,
+            discountPrice:null,
+            num:null,
+            day:null,
+            online:null,
+            image:null,
+            desc:null
         }
     }
     render() {
@@ -45,56 +52,52 @@ class BackStageSlider extends Component {
             <div id='slider'>
                 <div key={'form'} className='form'>
                     <div style={{ marginRight: 20, width: '50%' }}>
-                        <div style={{fontSize: 16 }}><div>商品名称 : </div> <Input onChange={(e) => this.onChange(e, 'title')} value={this.state.title} placeholder="请输入商品名称" /></div>
-                        <div style={{fontSize: 16 }}>
+                        <div style={{ fontSize: 16 }}><div>商品名称 : </div> <Input onChange={(e) => this.onChange(e, 'name')} value={this.state.name} placeholder="请输入商品名称" /></div>
+                        <div style={{ fontSize: 16 }}>
                             <div>商品原价格 : </div>
-                            <Input onChange={(e) => this.onChange(e, 'url')} value={this.state.url} placeholder="请输入商品价格" />
+                            <Input onChange={(e) => this.onChange(e, 'price')} value={this.state.price} placeholder="请输入商品价格" />
                         </div>
-                        <div style={{fontSize: 16 }}>
+                        <div style={{ fontSize: 16 }}>
                             <div>商品打折价格 : </div>
-                            <Input onChange={(e) => this.onChange(e, 'url')} value={this.state.url} placeholder="请输入商品打折价格" />
+                            <Input onChange={(e) => this.onChange(e, 'discountPrice')} value={this.state.discountPrice} placeholder="请输入商品打折价格" />
                         </div>
-                        <div style={{fontSize: 16 }}>
+                        <div style={{ fontSize: 16 }}>
                             <div>商品库存 : </div>
-                            <Input onChange={(e) => this.onChange(e, 'index')} value={this.state.index} placeholder="请输入商品库存" />
+                            <Input onChange={(e) => this.onChange(e, 'num')} value={this.state.num} placeholder="请输入商品库存" />
                         </div>
-
-                        
-
-                        <div style={{fontSize: 16 }}>
+                        <div style={{ fontSize: 16 }}>
                             <div>商品有效期 : </div>
-                            <Input onChange={(e) => this.onChange(e, 'url')} value={this.state.url} placeholder="请输入商品有效期" />
+                            <Input onChange={(e) => this.onChange(e, 'day')} value={this.state.day} placeholder="请输入商品有效期" />
                         </div>
-                        <div style={{fontSize: 16 }}>
-                            <div>商品描述 : </div>
-                            <Input onChange={(e) => this.onChange(e, 'url')} value={this.state.url} placeholder="请输入商品价格" />
-                        </div>
-                        <div style={{fontSize: 16 }}>
+                        <div style={{ fontSize: 16 }}>
                             <div>是否上架 : </div>
                             <Switch onChange={(e) => this.onSwitchChange(e)} className='switch' />
                         </div>
-                        <div style={{fontSize: 16 }}>
+                        <div style={{ fontSize: 16 }}>
                             <div>商品分类 : </div>
                             <div>
-                            <Select
-                                defaultValue={provinceData[0]}
-                                style={{ width: 120 }}
-                                onChange={this.handleProvinceChange}
-                                style={{ marginTop: 10,marginRight:10 }}
-                            >
-                                {provinceData.map(province => <Option key={province}>{province}</Option>)}
-                            </Select>
-                            <Select
-                                style={{ width: 120 }}
-                                value={this.state.secondCity}
-                                onChange={this.onSecondCityChange}
-                            
-                            >
-                                {this.state.cities.map(city => <Option key={city}>{city}</Option>)}
-                            </Select>
+                                <Select
+                                onSelect={(e)=>this.onSelect(e)}
+                                    defaultValue={provinceData[0]}
+                                    style={{ width: 120 }}
+                                    onChange={this.handleProvinceChange}
+                                    style={{ marginTop: 10, marginRight: 10 }}
+                                >
+                                    {provinceData.map(province => <Option key={province}>{province}</Option>)}
+                                </Select>
+                                <Select
+                                onSelect={(e)=>this.onSelect(e)}
+                                    style={{ width: 120 }}
+                                    value={this.state.secondCity}
+                                    onChange={this.onSecondCityChange}
+                                >
+                                    {this.state.cities.map(city => <Option key={city}>{city}</Option>)}
+                                </Select>
                             </div>
                         </div>
                     </div>
+                    <div className='right'>
+                    <p>商品图片</p>
                     <Upload
                         name="image"
                         listType="picture-card"
@@ -112,11 +115,13 @@ class BackStageSlider extends Component {
                     >
                         {imageUrl ? <img className='img' src={imageUrl} alt="avatar" /> : uploadButton}
                     </Upload>
-                    <script id="container" name="content" type="text/plain">
-        这里写你的初始化内容
-    </script>
+                    <div>
+                        <p>商品描述</p>
+                        <div id='div1' style={{'width':'100%'}}></div>
+                    </div>
+                    </div>
                 </div>
-                <Button type="primary" onClick={() => this.submit()} style={{ marginLeft: 15,marginTop:10 }}>提交</Button>
+                <Button type="primary" onClick={() => this.submit()} style={{ marginLeft: 15, marginTop: 10 }}>提交</Button>
             </div>
         )
     }
@@ -160,22 +165,23 @@ class BackStageSlider extends Component {
     }
 
     onSwitchChange(e) {
-        console.log(e);
-
+        this.setState({
+            online:e
+        })
     }
 
     handleProvinceChange = (value) => {
         this.setState({
-          cities: cityData[value],
-          secondCity: cityData[value][0],
+            cities: cityData[value],
+            secondCity: cityData[value][0],
         });
-      }
-    
-      onSecondCityChange = (value) => {
+    }
+
+    onSecondCityChange = (value) => {
         this.setState({
-          secondCity: value,
+            secondCity: value,
         });
-      }
+    }
 
     onClick() {
         this.setState({
@@ -188,11 +194,11 @@ class BackStageSlider extends Component {
     }
 
     async submit() {
+        this.setState({
+            desc:this.editor2.txt.html()
+        })
+        console.log(this.state)
         return
-        if (!this.state.title && !this.state.url && !this.state.index && !this.state.image) {
-            message.error('请把表单填写完整!');
-            return
-        }
         var formdata = new FormData();
 
 
@@ -217,13 +223,6 @@ class BackStageSlider extends Component {
             error({ description: '上传失败' })
         } finally {
             notification.close('loading')
-            this.setState({
-                title: null,
-                url: null,
-                index: null,
-                image: null,
-                imageUrl: null
-            })
         }
     }
 
@@ -264,13 +263,26 @@ class BackStageSlider extends Component {
     edit(item) { }
 
     componentDidMount() {
-        var ue = UE.getEditor('container');
+        this.initEdit()
+    }
+
+    initEdit(){
+        this.editor2 = new wangEditor('#div1')
+        // this.editor2.customConfig.uploadImgShowBase64 = true
+        this.editor2.customConfig.uploadFileName = 'image'
+        this.editor2.customConfig.uploadImgTimeout = 30000
+        this.editor2.customConfig.uploadImgServer = '/zhifa/upload'
+        this.editor2.create()
     }
 
     onclick(key) {
         this.setState({
             [key]: false
         })
+    }
+
+    onSelect(e){
+        console.log(e)
     }
 }
 
