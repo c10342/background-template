@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './index.css'
 import { Table, Input, Button, Pagination } from 'antd'
 import List from '../list'
+import {withRouter} from 'react-router-dom'
 
 const columns = ['名称', '描述', '价格', '操作'];
 
@@ -60,7 +61,9 @@ class User extends Component {
                                     <span>{item.province}</span>
                                     <span className='check'>
                                         {/* <span onClick={() => this.check(item)}>查看</span> */}
-                                        <span onClick={() => this.edit(item)}>编辑</span>
+                                        <span onClick={() => {
+                                            this.handleerClick('编辑商品', '/edit')
+                                        }}>编辑</span>
                                         <span>删除</span>
                                         <span>上架</span>
                                         <span>抢购</span>
@@ -70,7 +73,7 @@ class User extends Component {
                         })
                     }
                 </List>
-               
+
             </div>
         )
     }
@@ -78,13 +81,17 @@ class User extends Component {
     onChange(num) {
         console.log(num);
     }
-    check(obj) {
-        console.log(obj);
-    }
-    edit(obj) {
-        console.log(obj);
+
+    handleerClick(title, pathname) {
+        // this.setState({title})
+        if (pathname) {
+            if (this.props.location.pathname == pathname) {
+                return
+            }
+            this.props.history.push({pathname})
+        }
     }
 
 }
 
-export default User;
+export default withRouter(User);

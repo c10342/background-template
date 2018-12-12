@@ -1,0 +1,25 @@
+#edit{
+    padding: 24px;
+}
+
+#edit .avatar-uploader  .ant-upload {
+    width: 128px;
+    height: 128px;
+}
+
+#edit .form .img{
+    width: 128px;
+    height: 128px;
+}
+
+#edit .form{
+    display: flex;
+    flex-direction: row;
+    /* align-items: center; */
+    justify-content: flex-start;
+}
+
+#edit .right{
+    display: flex;
+    flex-direction: column;
+}
