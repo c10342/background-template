@@ -7,37 +7,24 @@ import axios from 'axios'
 import wangEditor from 'wangeditor'
 
 const Option = Select.Option;
-const provinceData = ['Zhejiang', 'Jiangsu'];
-const cityData = {
-    Zhejiang: ['Hangzhou', 'Ningbo', 'Wenzhou'],
-    Jiangsu: ['Nanjing', 'Suzhou', 'Zhenjiang'],
-};
 
 class BackStageSlider extends Component {
     constructor(props) {
         super(props)
-        this.editor2=null
+        this.editor2 = null
         this.state = {
-            cities: cityData[provinceData[0]],
-            secondCity: cityData[provinceData[0]][0],
-            // title: null,
-            // url: null,
-            // index: null,
-            // image: null,
-            // isShowFrom: false,
-            // total: null,
-            // pageSize: 6,
-            // currentPage: 1,
-            // dataSource: [],
-            // isCheck: false
-            name:null,
-            price:null,
-            discountPrice:null,
-            num:null,
-            day:null,
-            online:null,
-            image:null,
-            desc:null
+            firstCategory: [{ text: '请选择' }],
+            selectedFirstCategory: null,
+            secondCategory: [{ categoryName: '请选择' }],
+            selectedSecondCategory: null,
+            name: null,
+            price: null,
+            discountPrice: null,
+            num: null,
+            day: null,
+            online: false,
+            image: null,
+            desc: null
         }
     }
     render() {
@@ -71,54 +58,51 @@ class BackStageSlider extends Component {
                         </div>
                         <div style={{ fontSize: 16 }}>
                             <div>是否上架 : </div>
-                            <Switch onChange={(e) => this.onSwitchChange(e)} className='switch' />
+                            <Switch defaultChecked={this.state.online} onChange={(e) => this.onSwitchChange(e)} className='switch' />
                         </div>
                         <div style={{ fontSize: 16 }}>
                             <div>商品分类 : </div>
                             <div>
                                 <Select
-                                onSelect={(e)=>this.onSelect(e)}
-                                    defaultValue={provinceData[0]}
-                                    style={{ width: 120 }}
-                                    onChange={this.handleProvinceChange}
-                                    style={{ marginTop: 10, marginRight: 10 }}
+                                    onSelect={(e, o) => this.onSelect(e, o)}
+                                    defaultValue={this.state.firstCategory[0].text}
+                                    style={{ width: 120, marginTop: 10, marginRight: 10 }}
                                 >
-                                    {provinceData.map(province => <Option key={province}>{province}</Option>)}
+                                    {this.state.firstCategory.map((province, index) => <Option key={index}>{province.text}</Option>)}
                                 </Select>
                                 <Select
-                                onSelect={(e)=>this.onSelect(e)}
+                                    onSelect={(e, o) => this.onSelectSecond(e, o)}
                                     style={{ width: 120 }}
-                                    value={this.state.secondCity}
-                                    onChange={this.onSecondCityChange}
+                                    value={this.state.secondCategory[0].categoryName}
                                 >
-                                    {this.state.cities.map(city => <Option key={city}>{city}</Option>)}
+                                    {this.state.secondCategory.map((city, index) => <Option key={index}>{city.categoryName}</Option>)}
                                 </Select>
                             </div>
                         </div>
                     </div>
                     <div className='right'>
-                    <p>商品图片</p>
-                    <Upload
-                        name="image"
-                        listType="picture-card"
-                        className="avatar-uploader"
-                        showUploadList={false}
-                        action="/v1/banner/"
-                        beforeUpload={(file) => this.beforeUpload(file)}
-                        onChange={(file) => this.handleChange(file)}
-                        customRequest={(e) => this.customRequest(e)}
-                        data={{
-                            title: '123',
-                            url: '4',
-                            index: 885645
-                        }}
-                    >
-                        {imageUrl ? <img className='img' src={imageUrl} alt="avatar" /> : uploadButton}
-                    </Upload>
-                    <div>
-                        <p>商品描述</p>
-                        <div id='div1' style={{'width':'100%'}}></div>
-                    </div>
+                        <p>商品图片</p>
+                        <Upload
+                            name="image"
+                            listType="picture-card"
+                            className="avatar-uploader"
+                            showUploadList={false}
+                            action="/v1/banner/"
+                            beforeUpload={(file) => this.beforeUpload(file)}
+                            onChange={(file) => this.handleChange(file)}
+                            customRequest={(e) => this.customRequest(e)}
+                            data={{
+                                title: '123',
+                                url: '4',
+                                index: 885645
+                            }}
+                        >
+                            {imageUrl ? <img className='img' src={imageUrl} alt="avatar" /> : uploadButton}
+                        </Upload>
+                        <div>
+                            <p>商品描述</p>
+                            <div id='div1' style={{ 'width': '100%' }}></div>
+                        </div>
                     </div>
                 </div>
                 <Button type="primary" onClick={() => this.submit()} style={{ marginLeft: 15, marginTop: 10 }}>提交</Button>
@@ -166,21 +150,8 @@ class BackStageSlider extends Component {
 
     onSwitchChange(e) {
         this.setState({
-            online:e
+            online: e
         })
-    }
-
-    handleProvinceChange = (value) => {
-        this.setState({
-            cities: cityData[value],
-            secondCity: cityData[value][0],
-        });
-    }
-
-    onSecondCityChange = (value) => {
-        this.setState({
-            secondCity: value,
-        });
     }
 
     onClick() {
@@ -195,9 +166,27 @@ class BackStageSlider extends Component {
 
     async submit() {
         this.setState({
-            desc:this.editor2.txt.html()
+            desc: this.editor2.txt.html()
         })
-        console.log(this.state)
+        if(!this.state.selectedFirstCategory || 
+            !this.state.selectedSecondCategory ||
+            !this.state.name ||
+            !this.state.price ||
+            !this.state.discountPrice ||
+            !this.state.num ||
+            !this.state.day ||
+            !this.state.online ||
+            !this.state.image ||
+            !this.state.desc 
+         ){
+             message.error('信息不能为空')
+             return
+         }
+         if(this.state.price>this.state.discountPrice){
+             message.error('原价不能大于折扣价')
+             return
+         }
+         console.log(this.state)
         return
         var formdata = new FormData();
 
@@ -264,9 +253,10 @@ class BackStageSlider extends Component {
 
     componentDidMount() {
         this.initEdit()
+        this.getCategory()
     }
 
-    initEdit(){
+    initEdit() {
         this.editor2 = new wangEditor('#div1')
         // this.editor2.customConfig.uploadImgShowBase64 = true
         this.editor2.customConfig.uploadFileName = 'image'
@@ -281,8 +271,32 @@ class BackStageSlider extends Component {
         })
     }
 
-    onSelect(e){
-        console.log(e)
+    async onSelect(e, o) {
+        try {
+            const result = await get('/category/findtgwSecondCategoryById', { id: e })
+            this.setState({
+                selectedFirstCategory: o.props.children,
+                secondCategory: result,
+                selectedSecondCategory: result[0].categoryName
+            })
+        } catch (error) {
+            message.error('获取二级分类失败');
+        }
+    }
+
+    onSelectSecond(e, o) {
+        this.setState({
+            selectedSecondCategory: o.props.children
+        })
+    }
+
+    async getCategory() {
+        try {
+            const result = await get('/category/findFirstCategory')
+            this.setState({ firstCategory: result,selectedFirstCategory:result[1].text })
+        } catch (e) {
+            message.error('获取一级分类失败');
+        }
     }
 }
 
