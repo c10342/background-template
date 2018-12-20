@@ -6,6 +6,7 @@ import Texty from 'rc-texty';
 import 'rc-texty/assets/index.css';
 import avatar from './images/default.png'
 import QueueAnim from 'rc-queue-anim'
+import storage from 'good-storage'
 
 import User from '../user'
 import Order from '../order'
@@ -22,7 +23,8 @@ class LayOut extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            title: '商品管理'
+            title: '商品管理',
+            userInfo:{}
         }
         this.router=[
             {
@@ -58,7 +60,7 @@ class LayOut extends Component {
                     <div className='person'>
                         <img className='avatar' src={avatar} alt=""/>
                         <div className='author'>
-                            <span>张三</span>
+                            <span>{this.state.userInfo.username}</span>
                             <span>欢迎登录</span>
                             <span>退出</span>
                         </div>
@@ -136,10 +138,15 @@ class LayOut extends Component {
     }
 
     componentWillMount() {
+        const userInfo = storage.get('userInfo',{})
+        if(!userInfo.id){
+            this.props.history.replace({pathname:'/login'})
+        }
         let pathname = this.props.location.pathname
         let router = this.router.filter(item=>item.path == pathname)[0]
         this.setState({
-            title:router.title
+            title:router.title,
+            userInfo
         })
     }
 }

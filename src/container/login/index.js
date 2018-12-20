@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {Layout,Icon,Input,Button} from 'antd'
+import {Layout,Icon,Input,Button,message} from 'antd'
 import './index.css'
+import {post} from '../../util'
+import storage from 'good-storage'
 
 const {Header,Content,Footer} = Layout
 
@@ -8,8 +10,8 @@ class Login extends Component {
     constructor(props) {
         super(props)
         this.state={
-            username:'root',
-            password:123
+            username:'13427491053',
+            password:123456
         }
     }
     render(){
@@ -35,15 +37,28 @@ class Login extends Component {
                             </div>
                         </div>
                     </Content>
-                    <Footer className='footer'>Copyright Connected Health, Inc. 2018-NowDay &#169</Footer>
+                    <Footer className='footer'>团购网商家后台</Footer>
                 </Layout>
             </div>
         )
     }
-    login(){
-        this.props.history.push({
-            pathname:'/shop'
-        })
+    async login(){
+        try {
+            const formData = new FormData()
+            formData.append('username',this.state.username)
+            formData.append('password',this.state.password)
+            const result = await post('/tjsanshao/businessman/login',formData)
+            if(result.status == 'success'){
+                storage.set('userInfo',result.businessman)
+                this.props.history.push({
+                    pathname:'/shop'
+                })
+            }else{
+                message.error('登陆失败')
+            }
+        } catch (error) {
+            message.error('服务器或者网络失败')
+        }
     }
     onChange(e,key){
         this.setState({

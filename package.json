@@ -30,6 +30,7 @@
     "file-loader": "2.0.0",
     "fork-ts-checker-webpack-plugin-alt": "0.4.14",
     "fs-extra": "7.0.0",
+    "good-storage": "^1.1.0",
     "html-webpack-plugin": "4.0.0-alpha.2",
     "identity-obj-proxy": "3.0.0",
     "jest": "23.6.0",
@@ -130,5 +131,5 @@
       ]
     ]
   },
-  "proxy": "http://xiaojian2333.free.idcfengye.com"
+  "proxy": "http://172.16.13.153:8080"
 }
