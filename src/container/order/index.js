@@ -1,59 +1,26 @@
 import React, { Component } from 'react';
 import './index.css'
-import { Table, Input, Button, Pagination } from 'antd'
+import { Table, Input, Button, Pagination,message,notification } from 'antd'
 import List from '../list'
+import {formatDate,get} from '../../util'
 
-const columns = ['编号', '名称', '价格','时间'];
+const columns = ['id', '创建时间', '订单编号','时间'];
 
 class Order extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            dataSource: [{
-                key: '1',
-                date: '2018-11-11',
-                name: '胡彦斌',
-                province: '广东省',
-                time: '6',
-            }, {
-                key: '2',
-                date: '2018-11-11',
-                name: '胡彦斌',
-                province: '广东省',
-                time: '5',
-            }, {
-                key: '3',
-                date: '2018-11-11',
-                name: '胡彦斌',
-                province: '广东省',
-                time: '4',
-            }, {
-                key: '4',
-                date: '2018-11-11',
-                name: '胡彦斌',
-                province: '广东省',
-                time: '3',
-            }, {
-                key: '5',
-                date: '2018-11-11',
-                name: '胡彦斌',
-                province: '广东省',
-                time: '2',
-            }, {
-                key: '6',
-                date: '2018-11-11',
-                name: '胡彦斌',
-                province: '广东省',
-                time: '1',
-            }]
+            dataSource: [],
+            pageSize:6,
+            total:0
         }
     }
     render() {
         return (
             <div id='order'>
                 <div className='search'>
-                    <Input style={{ width: '50%' }} placeholder="请输入" />
-                    <Button icon="search" type="primary">搜索</Button>
+                    {/* <Input style={{ width: '50%' }} placeholder="请输入" />
+                    <Button icon="search" type="primary">搜索</Button> */}
                 </div>
                 <List
                     onChange={this.onChange.bind(this)}
@@ -89,6 +56,29 @@ class Order extends Component {
     }
     edit(obj) {
         console.log(obj);
+    }
+    async getShopList() {
+        let hide =null;
+        try {
+            hide = message.loading('查询中', 0);
+            const result = await get('/tjsanshao/businessman/orders')
+            if(result.status != 'success'){
+                message.error(result.message)
+            }
+            if(result.status == 'success'){
+                this.setState({
+                    dataSource:result.list,
+                    total:result.total
+                })
+            }
+        } catch (e) {
+            notification.open({
+                message: '提示',
+                description: '网络出错',
+              });
+         }finally{
+            hide()
+        }
     }
 }
 

@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { Upload, Icon, message, Input, Button, notification, Switch, Select } from 'antd';
 import QueueAnim from 'rc-queue-anim';
 import './index.css'
-import { post, error, success, formatDate, get } from '../../util'
-import axios from 'axios'
+import { post, error, success, get } from '../../util'
+// import axios from 'axios'
 import wangEditor from 'wangeditor'
+import storage from 'good-storage'
 
 const Option = Select.Option;
 const provinceData = ['Zhejiang', 'Jiangsu'];
@@ -16,18 +17,20 @@ const cityData = {
 class Edit extends Component {
     constructor(props) {
         super(props)
-        this.editor2=null
+        this.editor2 = null
         this.state = {
             cities: cityData[provinceData[0]],
             secondCity: cityData[provinceData[0]][0],
-            name:null,
-            price:null,
-            discountPrice:null,
-            num:null,
-            day:null,
-            online:null,
-            image:null,
-            desc:null
+            name: null,
+            price: null,
+            discountPrice: null,
+            num: null,
+            day: null,
+            online: null,
+            image: null,
+            desc: null,
+            category: null,
+            imageUrl: null
         }
     }
     render() {
@@ -42,91 +45,74 @@ class Edit extends Component {
             <div id='edit'>
                 <div key={'form'} className='form'>
                     <div style={{ marginRight: 20, width: '50%' }}>
-                        <div style={{ fontSize: 16 }}><div>商品名称 : </div> 
-                        <Input defaultValue={this.props.name} onChange={(e) => this.onChange(e, 'name')} value={this.state.name} placeholder="请输入商品名称" />
+                        <div style={{ fontSize: 16 }}><div>商品名称 : </div>
+                            <Input defaultValue={this.state.name} onChange={(e) => this.onChange(e, 'name')} value={this.state.name} placeholder="请输入商品名称" />
                         </div>
                         <div style={{ fontSize: 16 }}>
                             <div>商品原价格 : </div>
-                            <Input defaultValue={this.props.price} onChange={(e) => this.onChange(e, 'price')} value={this.state.price} placeholder="请输入商品价格" />
+                            <Input defaultValue={this.state.price} onChange={(e) => this.onChange(e, 'price')} value={this.state.price} placeholder="请输入商品价格" />
                         </div>
                         <div style={{ fontSize: 16 }}>
                             <div>商品打折价格 : </div>
-                            <Input defaultValue={this.props.discountPrice} onChange={(e) => this.onChange(e, 'discountPrice')} value={this.state.discountPrice} placeholder="请输入商品打折价格" />
+                            <Input defaultValue={this.state.discountPrice} onChange={(e) => this.onChange(e, 'discountPrice')} value={this.state.discountPrice} placeholder="请输入商品打折价格" />
                         </div>
                         <div style={{ fontSize: 16 }}>
                             <div>商品库存 : </div>
-                            <Input defaultValue={this.props.num} onChange={(e) => this.onChange(e, 'num')} value={this.state.num} placeholder="请输入商品库存" />
+                            <Input defaultValue={this.state.num} onChange={(e) => this.onChange(e, 'num')} value={this.state.num} placeholder="请输入商品库存" />
                         </div>
                         <div style={{ fontSize: 16 }}>
                             <div>商品有效期 : </div>
-                            <Input defaultValue={this.props.day} onChange={(e) => this.onChange(e, 'day')} value={this.state.day} placeholder="请输入商品有效期" />
-                        </div>
-                        <div style={{ fontSize: 16 }}>
-                            <div>是否上架 : </div>
-                            <Switch defaultValue={this.props.online} onChange={(e) => this.onSwitchChange(e)} className='switch' />
+                            <Input defaultValue={this.state.day} onChange={(e) => this.onChange(e, 'day')} value={this.state.day} placeholder="请输入商品有效期" />
                         </div>
                         <div style={{ fontSize: 16 }}>
                             <div>商品分类 : </div>
-                            <div>
-                                <Select
-                                onSelect={(e)=>this.onSelect(e)}
-                                    defaultValue={provinceData[0]}
-                                    style={{ width: 120 }}
-                                    onChange={this.handleProvinceChange}
-                                    style={{ marginTop: 10, marginRight: 10 }}
-                                >
-                                    {provinceData.map(province => <Option key={province}>{province}</Option>)}
-                                </Select>
-                                <Select
-                                onSelect={(e)=>this.onSelect(e)}
-                                    style={{ width: 120 }}
-                                    value={this.state.secondCity}
-                                    onChange={this.onSecondCityChange}
-                                >
-                                    {this.state.cities.map(city => <Option key={city}>{city}</Option>)}
-                                </Select>
-                            </div>
+                            <Input defaultValue={this.state.category} onChange={(e) => this.onChange(e, 'category')} placeholder="商品分类" />
                         </div>
+                        {/* <div style={{ fontSize: 16 }}>
+                            <div>是否上架 : </div>
+                            <Switch checked={this.state.online} onChange={(e) => this.onSwitchChange(e)} className='switch' />
+                        </div> */}
+
                     </div>
                     <div className='right'>
-                    <p>商品图片</p>
-                    <Upload
-                        name="image"
-                        listType="picture-card"
-                        className="avatar-uploader"
-                        showUploadList={false}
-                        action="/v1/banner/"
-                        beforeUpload={(file) => this.beforeUpload(file)}
-                        onChange={(file) => this.handleChange(file)}
-                        customRequest={(e) => this.customRequest(e)}
-                        data={{
-                            title: '123',
-                            url: '4',
-                            index: 885645
-                        }}
-                    >
-                        {this.props.imageUrl ? <img className='img' src={this.props.imageUrl} alt="avatar" /> : uploadButton}
-                    </Upload>
-                    <div>
-                        <p>商品描述</p>
-                        <div id='div1' style={{'width':'100%'}}></div>
-                    </div>
+                        <p>商品图片</p>
+                        <Upload
+                            name="image"
+                            listType="picture-card"
+                            className="avatar-uploader"
+                            showUploadList={false}
+                            action="/v1/banner/"
+                            beforeUpload={(file) => this.beforeUpload(file)}
+                            onChange={(file) => this.handleChange(file)}
+                            customRequest={(e) => this.customRequest(e)}
+                            data={{
+                                title: '123',
+                                url: '4',
+                                index: 885645
+                            }}
+                        >
+                            {this.state.imageUrl ? <img className='img' src={this.state.imageUrl} alt="avatar" /> : uploadButton}
+                        </Upload>
+                        <div>
+                            <p>商品描述</p>
+                            <div id='div1' style={{ 'width': '100%' }}></div>
+                        </div>
                     </div>
                 </div>
                 <Button type="primary" onClick={() => this.submit()} style={{ marginLeft: 15, marginTop: 10 }}>保存</Button>
-                <Button type="primary" onClick={() => {this.props.history.goBack()}} style={{ marginLeft: 15, marginTop: 10 }}>返回</Button>
+                <Button type="primary" onClick={() => { this.props.history.goBack() }} style={{ marginLeft: 15, marginTop: 10 }}>返回</Button>
             </div>
         )
     }
 
     handleChange(info) {
-        if (!info.file.originFileObj) {
+        if (!info.fileList[0].originFileObj) {
             return
         }
         this.setState({
             image: info.fileList[0].originFileObj
         })
-        this.getBase64(info.file.originFileObj, imageUrl => {
+        this.getBase64(info.fileList[0].originFileObj, imageUrl => {
             this.setState({
                 imageUrl,
             })
@@ -148,7 +134,7 @@ class Edit extends Component {
         if (!isLt2M) {
             message.error('图片不能大于1MB!');
         }
-        return isJPG && isLt2M;
+        return false
     }
 
     onChange(e, key) {
@@ -159,7 +145,7 @@ class Edit extends Component {
 
     onSwitchChange(e) {
         this.setState({
-            online:e
+            online: e
         })
     }
 
@@ -187,32 +173,38 @@ class Edit extends Component {
     }
 
     async submit() {
-        this.setState({
-            desc:this.editor2.txt.html()
-        })
-        return
+
         var formdata = new FormData();
-
-
+        formdata.append('id', storage.get('shopDetail').goods.id)
+        formdata.append('goodsTitle', this.state.name)
+        formdata.append('oringinalPrice', this.state.price)
+        formdata.append('discountPrice', this.state.discountPrice)
+        formdata.append('tgwBusinessmanId', storage.get('shopDetail').goods.tgwBusinessmanId)
+        formdata.append('goodsCategory', this.state.category)
+        formdata.append('goodsDesc', this.state.desc)
+        formdata.append('goodsRepertory', this.state.num)
+        formdata.append('termOfValidity', this.state.day)
+        if (this.state.image != this.state.imageUrl) {
+            formdata.append('image', this.state.image)
+        }
         try {
             notification.open({
-                message: '上传中',
+                message: '修改中中',
                 description: '请耐心等待',
                 duration: null,
                 icon: <Icon type="loading" theme="outlined" />,
                 key: 'loading'
             });
-            const result = await axios.post('/v1/banner/', formdata, {
+            const result = await post('/xiaojian/updateGoods', formdata, {
                 headers: { "Content-Type": "multipart/form-data" }
             })
-
-            if (result.data.succode == 201) {
-                success()
+            if (result.status == 'success') {
+                success({ description: '修改成功' })
             } else {
-                error({ description: result.data.msg })
+                error({ description: result.message })
             }
         } catch (e) {
-            error({ description: '上传失败' })
+            error({ description: '网络或者服务器错误' })
         } finally {
             notification.close('loading')
         }
@@ -247,25 +239,38 @@ class Edit extends Component {
 
     check(item) {
         this.setState({
-            isCheck: true,
-            detailInfo: item
+            isCheck: true
         })
     }
 
     edit(item) { }
 
     componentDidMount() {
-        
+
+        const shopDetail = storage.get('shopDetail')
+        this.setState({
+            name: shopDetail.goods.goodsTitle,
+            price: shopDetail.goods.oringinalPrice,
+            discountPrice: shopDetail.goods.discountPrice,
+            num: shopDetail.goodsDetail.goodsRepertory,
+            day: shopDetail.goodsDetail.termOfValidity,
+            online: shopDetail.goods.isOnline == 1 ? true : false,
+            image: shopDetail.goodsImage.imageUrl,
+            imageUrl: shopDetail.goodsImage.imageUrl,
+            desc: shopDetail.goodsDetail.goodsDesc,
+            category: shopDetail.goods.goodsCategory
+        })
+
         this.initEdit()
     }
 
-    initEdit(){
+    initEdit() {
         this.editor2 = new wangEditor('#div1')
         this.editor2.customConfig.uploadFileName = 'image'
         this.editor2.customConfig.uploadImgTimeout = 30000
         this.editor2.customConfig.uploadImgServer = '/zhifa/upload'
         this.editor2.create()
-        this.editor2.txt.html(this.props.desc)
+        this.editor2.txt.html(storage.get('shopDetail').goodsDetail.goodsDesc)
     }
 
     onclick(key) {
@@ -274,7 +279,7 @@ class Edit extends Component {
         })
     }
 
-    onSelect(e){
+    onSelect(e) {
         console.log(e)
     }
 }

@@ -1,7 +1,7 @@
 import './index.css'
-import React, {Component} from 'react';
-import {Layout, Menu, Icon} from 'antd';
-import {Route, withRouter, Redirect} from 'react-router-dom'
+import React, { Component } from 'react';
+import { Layout, Menu, Icon } from 'antd';
+import { Route, withRouter, Redirect } from 'react-router-dom'
 import Texty from 'rc-texty';
 import 'rc-texty/assets/index.css';
 import avatar from './images/default.png'
@@ -12,11 +12,13 @@ import User from '../user'
 import Order from '../order'
 import Bottom from '../bottom'
 import AddGood from '../backstage-slider'
-import Edit from '../edit' 
+import Edit from '../edit'
+
+import {get} from '../../util'
 
 
-const {SubMenu} = Menu;
-const {Header, Content, Sider} = Layout;
+const { SubMenu } = Menu;
+const { Header, Content, Sider } = Layout;
 
 
 class LayOut extends Component {
@@ -24,62 +26,62 @@ class LayOut extends Component {
         super(props)
         this.state = {
             title: '商品管理',
-            userInfo:{}
+            userInfo: {}
         }
-        this.router=[
+        this.router = [
             {
-                path:"/shop",
-                component:User,
-                title:'商品管理'
+                path: "/shop",
+                component: User,
+                title: '商品管理'
             },
             {
-                path:"/order",
-                component:Order,
-                title:'订单查看'
+                path: "/order",
+                component: Order,
+                title: '订单查看'
             },
             {
-                path:"/addGood",
-                component:AddGood,
-                title:'添加商品'
+                path: "/addGood",
+                component: AddGood,
+                title: '添加商品'
             },
             {
-                path:"/edit",
-                component:Edit,
-                title:'编辑商品'
+                path: "/edit",
+                component: Edit,
+                title: '编辑商品'
             }
         ]
     }
 
     render() {
         let pathname = this.props.location.pathname
-        let router = this.router.filter(item=>item.path == pathname)[0]
+        let router = this.router.filter(item => item.path == pathname)[0]
         return (
             <Layout id="layout">
                 <Header className="header">
-                <div className='my-title'>团购网</div>
+                    <div className='my-title'>团购网</div>
                     <div className='person'>
-                        <img className='avatar' src={avatar} alt=""/>
+                        <img className='avatar' src={avatar} alt="" />
                         <div className='author'>
                             <span>{this.state.userInfo.username}</span>
                             <span>欢迎登录</span>
-                            <span>退出</span>
+                            <span onClick={() => { this.logout() }}>退出</span>
                         </div>
                     </div>
                 </Header>
                 <Layout>
-                    <Sider width={200} style={{background: '#fff', 'overflowY': 'auto', 'overflowX': 'hidden'}}>
+                    <Sider width={200} style={{ background: '#fff', 'overflowY': 'auto', 'overflowX': 'hidden' }}>
                         <Menu
                             mode="inline"
                             defaultSelectedKeys={[pathname]}
                             selectedKeys={[pathname]}
-                            style={{height: '100%', borderRight: 0}}
+                            style={{ height: '100%', borderRight: 0 }}
                         >
                             <Menu.Item
                                 key="/shop"
                                 onClick={() => {
                                     this.handleerClick('商品管理', '/shop')
                                 }}>
-                                <Icon type="user" theme="outlined"/>
+                                <Icon type="user" theme="outlined" />
                                 <Texty interval={200} delay={400} component={'span'}>
                                     {/* 用户管理 */}
                                     商品管理
@@ -107,17 +109,17 @@ class LayOut extends Component {
                             </Menu.Item>
                         </Menu>
                     </Sider>
-                    <Layout style={{padding: '0 24px 24px'}}>
-                        <div style={{margin: '16px 0'}}>
+                    <Layout style={{ padding: '0 24px 24px' }}>
+                        <div style={{ margin: '16px 0' }}>
                             <h1>
                                 <Texty interval={200}>
                                     {this.state.title}
                                 </Texty>
                             </h1>
                         </div>
-                        <Content style={{background: '#fff', margin: 0, height: 'auto',minHeight:'auto'}}>
+                        <Content style={{ background: '#fff', margin: 0, height: 'auto', minHeight: 'auto' }}>
                             <QueueAnim duration={2000} type={'scale'}>
-                                <Route exact key={router.path} path={router.path} component={router.component}/>
+                                <Route exact key={router.path} path={router.path} component={router.component} />
                             </QueueAnim>
                         </Content>
                     </Layout>
@@ -128,24 +130,33 @@ class LayOut extends Component {
     }
 
     handleerClick(title, pathname) {
-        this.setState({title})
+        this.setState({ title })
         if (pathname) {
             if (this.props.location.pathname == pathname) {
                 return
             }
-            this.props.history.push({pathname})
+            this.props.history.push({ pathname })
         }
     }
 
+    async logout() {
+        try {
+            const result = await get('/tjsanshao/businessman/logout')
+            storage.set('userInfo', {})
+            this.props.history.replace({ pathname: '/login' })
+        } catch (error) {} finally {}
+    }
+
     componentWillMount() {
-        const userInfo = storage.get('userInfo',{})
-        if(!userInfo.id){
-            this.props.history.replace({pathname:'/login'})
+        const userInfo = storage.get('userInfo', {})
+        if (!userInfo.id) {
+            this.props.history.replace({ pathname: '/login' })
+            return
         }
         let pathname = this.props.location.pathname
-        let router = this.router.filter(item=>item.path == pathname)[0]
+        let router = this.router.filter(item => item.path == pathname)[0]
         this.setState({
-            title:router.title,
+            title: router.title,
             userInfo
         })
     }
