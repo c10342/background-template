@@ -21,7 +21,7 @@ class List extends Component {
                     <Pagination
                         hideOnSinglePage={true}
                         showQuickJumper
-                        defaultCurrent={1}
+                        current={this.props.current}
                         total={this.props.total}
                         pageSize={this.props.pageSize}
                         onChange={(pageNumber)=>{this.onChange(pageNumber)}}/>,

@@ -5,6 +5,7 @@ import './index.css'
 import { post, error, success, formatDate, get } from '../../util'
 import axios from 'axios'
 import wangEditor from 'wangeditor'
+import storage from 'good-storage'
 
 const Option = Select.Option;
 
@@ -16,7 +17,7 @@ class BackStageSlider extends Component {
             firstCategory: [{ text: '请选择' }],
             selectedFirstCategory: null,
             secondCategory: [{ categoryName: '请选择' }],
-            selectedSecondCategory: null,
+            selectedSecondCategory: '请选择',
             name: null,
             price: null,
             discountPrice: null,
@@ -56,10 +57,10 @@ class BackStageSlider extends Component {
                             <div>商品有效期 : </div>
                             <Input onChange={(e) => this.onChange(e, 'day')} value={this.state.day} placeholder="请输入商品有效期" />
                         </div>
-                        <div style={{ fontSize: 16 }}>
+                        {/* <div style={{ fontSize: 16 }}>
                             <div>是否上架 : </div>
                             <Switch defaultChecked={this.state.online} onChange={(e) => this.onSwitchChange(e)} className='switch' />
-                        </div>
+                        </div> */}
                         <div style={{ fontSize: 16 }}>
                             <div>商品分类 : </div>
                             <div>
@@ -73,7 +74,7 @@ class BackStageSlider extends Component {
                                 <Select
                                     onSelect={(e, o) => this.onSelectSecond(e, o)}
                                     style={{ width: 120 }}
-                                    value={this.state.secondCategory[0].categoryName}
+                                    value={this.state.selectedSecondCategory}
                                 >
                                     {this.state.secondCategory.map((city, index) => <Option key={index}>{city.categoryName}</Option>)}
                                 </Select>
@@ -168,27 +169,44 @@ class BackStageSlider extends Component {
         this.setState({
             desc: this.editor2.txt.html()
         })
-        if(!this.state.selectedFirstCategory || 
+
+
+        // selectedSecondCategory: null,
+        //     name: null,
+        //     price: null,
+        //     discountPrice: null,
+        //     num: null,
+        //     day: null,
+        //     online: false,
+        //     image: null,
+        //     desc: null
+        if (!this.state.selectedFirstCategory ||
             !this.state.selectedSecondCategory ||
             !this.state.name ||
             !this.state.price ||
             !this.state.discountPrice ||
             !this.state.num ||
             !this.state.day ||
-            !this.state.online ||
             !this.state.image ||
-            !this.state.desc 
-         ){
-             message.error('信息不能为空')
-             return
-         }
-         if(this.state.price>this.state.discountPrice){
-             message.error('原价不能大于折扣价')
-             return
-         }
-         console.log(this.state)
-        return
+            !this.editor2.txt.html()
+        ) {
+            message.error('信息不能为空')
+            return
+        }
+        if (parseInt(this.state.price) < parseInt(this.state.discountPrice)) {
+            message.error('原价不能小于折扣价')
+            return
+        }
         var formdata = new FormData();
+        formdata.append('image', this.state.image)
+        formdata.append('goodsTitle', this.state.name)
+        formdata.append('oringinalPrice', this.state.price)
+        formdata.append('discountPrice', this.state.discountPrice)
+        formdata.append('tgwBusinessmanId', storage.get('userInfo').id)
+        formdata.append('goodsCategory', this.state.selectedSecondCategory)
+        formdata.append('goodsDesc', this.editor2.txt.html())
+        formdata.append('goodsRepertory', this.state.num)
+        formdata.append('termOfValidity', this.state.day)
 
 
         try {
@@ -199,17 +217,28 @@ class BackStageSlider extends Component {
                 icon: <Icon type="loading" theme="outlined" />,
                 key: 'loading'
             });
-            const result = await axios.post('/v1/banner/', formdata, {
-                headers: { "Content-Type": "multipart/form-data" }
-            })
+            const result = await post('/xiaojian/addGoods', formdata)
 
-            if (result.data.succode == 201) {
-                success()
+            if (result.status == 'success') {
+                success({ description: '添加成功' })
+                this.setState({
+                    selectedSecondCategory: '请选择',
+                    name: null,
+                    price: null,
+                    discountPrice: null,
+                    num: null,
+                    day: null,
+                    online: false,
+                    image: null,
+                    desc: null,
+                    imageUrl:null
+                })
+                this.editor2.txt.html('')
             } else {
-                error({ description: result.data.msg })
+                error({ description: result.message })
             }
         } catch (e) {
-            error({ description: '上传失败' })
+            error({ description: '添加失败' })
         } finally {
             notification.close('loading')
         }
@@ -293,7 +322,7 @@ class BackStageSlider extends Component {
     async getCategory() {
         try {
             const result = await get('/category/findFirstCategory')
-            this.setState({ firstCategory: result,selectedFirstCategory:result[1].text })
+            this.setState({ firstCategory: result, selectedFirstCategory: result[1].text })
         } catch (e) {
             message.error('获取一级分类失败');
         }
