@@ -66,7 +66,7 @@ class Edit extends Component {
                         </div>
                         <div style={{ fontSize: 16 }}>
                             <div>商品分类 : </div>
-                            <Input defaultValue={this.state.category} onChange={(e) => this.onChange(e, 'category')} placeholder="商品分类" />
+                            <Input value={this.state.category} onChange={(e) => this.onChange(e, 'category')} placeholder="商品分类" />
                         </div>
                         {/* <div style={{ fontSize: 16 }}>
                             <div>是否上架 : </div>
@@ -138,6 +138,9 @@ class Edit extends Component {
     }
 
     onChange(e, key) {
+        if(key == 'category'){
+            return
+        }
         this.setState({
             [key]: e.target.value
         })
@@ -181,7 +184,7 @@ class Edit extends Component {
         formdata.append('discountPrice', this.state.discountPrice)
         formdata.append('tgwBusinessmanId', storage.get('shopDetail').goods.tgwBusinessmanId)
         formdata.append('goodsCategory', this.state.category)
-        formdata.append('goodsDesc', this.state.desc)
+        formdata.append('goodsDesc', this.editor2.txt.html())
         formdata.append('goodsRepertory', this.state.num)
         formdata.append('termOfValidity', this.state.day)
         if (this.state.image != this.state.imageUrl) {

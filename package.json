@@ -16,7 +16,7 @@
     "babel-preset-react-app": "^6.1.0",
     "bfj": "6.1.1",
     "case-sensitive-paths-webpack-plugin": "2.1.2",
-    "chalk": "2.4.1",
+    "chalk": "^2.4.1",
     "css-loader": "1.0.0",
     "dotenv": "6.0.0",
     "dotenv-expand": "4.2.0",
@@ -131,5 +131,5 @@
       ]
     ]
   },
-  "proxy": "http://172.16.13.153:8080"
+  "proxy": "http://172.16.12.25:8080"
 }
